@@ -108,7 +108,17 @@ const store = {
             localStorage.setItem(key, JSON.stringify(value));
         },
         remove: (key) => localStorage.removeItem(key),
-        list: () => Object.keys(localStorage).map(key => JSON.parse(localStorage.getItem(key)))
+        list: () => Object.keys(localStorage)
+            .filter(key => key.startsWith('supply_') || key.startsWith('log_'))
+            .map(key => {
+                try {
+                    return JSON.parse(localStorage.getItem(key));
+                } catch (e) {
+                    console.error(`Error al analizar el elemento de localStorage para la clave "${key}":`, e);
+                    return null;
+                }
+            })
+            .filter(item => item !== null)
     }),
     SupplyRepository: (storage) => ({
         get: (id) => {
