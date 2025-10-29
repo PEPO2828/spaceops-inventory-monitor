@@ -445,34 +445,54 @@ const ui = {
             : '';
 
         element.innerHTML = `
-            <h2>${supply.name}</h2>
-            <p>Category: ${supply.category}</p>
-            <p>Current Stock: ${supply.currentStock}</p>
-            <p>Status: <span class="status-${status.toLowerCase()}">${status}</span></p>
-            <p>Projected Coverage: ${coverageDays !== Infinity ? coverageDays.toFixed(1) + ' days' : 'Infinite'}</p>
-            <p>Average Daily Consumption: ${avgConsumptionText} <small>${consumptionNote}</small></p>
-            <canvas id="stock-chart"></canvas>
-            <p id="chart-note" class="chart-note"></p>
-            <h3>Usage Log</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Quantity</th>
-                        <th>Type</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${logs.map(log => `
+            <div class="item-panel-header">
+                <h2>${supply.name}</h2>
+                <span class="item-category">Category: ${supply.category}</span>
+            </div>
+            <div class="item-panel-details">
+                <div class="detail-card">
+                    <h3>Current Stock</h3>
+                    <p class="stock-value">${supply.currentStock}</p>
+                </div>
+                <div class="detail-card">
+                    <h3>Status</h3>
+                    <p class="status-badge status-${status.toLowerCase()}">${status}</p>
+                </div>
+                <div class="detail-card">
+                    <h3>Projected Coverage</h3>
+                    <p class="coverage-value">${coverageDays !== Infinity ? coverageDays.toFixed(1) + ' days' : 'Infinite'}</p>
+                    <small class="coverage-note">Avg Daily: ${avgConsumptionText} ${consumptionNote}</small>
+                </div>
+            </div>
+
+            <div class="item-panel-chart">
+                <h3>Stock Level History</h3>
+                <canvas id="stock-chart"></canvas>
+                <p id="chart-note" class="chart-note"></p>
+            </div>
+
+            <div class="item-panel-logs">
+                <h3>Usage Log</h3>
+                <table>
+                    <thead>
                         <tr>
-                            <td>${utils.formatDate(log.date)}</td>
-                            <td>${log.quantity}</td>
-                            <td><span class="log-type-${log.type}">${log.type}</span></td>
+                            <th>Date</th>
+                            <th>Quantity</th>
+                            <th>Type</th>
                         </tr>
-                    `).join('')}
-                </tbody>
-            </table>
-            <button id="back-to-dashboard">Back to Dashboard</button>
+                    </thead>
+                    <tbody>
+                        ${logs.map(log => `
+                            <tr>
+                                <td>${utils.formatDate(log.date)}</td>
+                                <td>${log.quantity}</td>
+                                <td><span class="log-type-${log.type}">${log.type}</span></td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+            <button id="back-to-dashboard" class="btn-secondary">Back to Dashboard</button>
         `;
 
         const chartCanvas = utils.qs('#stock-chart', element);

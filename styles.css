@@ -385,39 +385,187 @@ button:hover {
     margin-top: 1.5rem;
 }
 
-.item-panel-view h2 {
-    color: var(--primary-color);
+.item-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
     border-bottom: 1px solid var(--border-color);
     padding-bottom: 1rem;
     margin-bottom: 1.5rem;
 }
 
-.item-panel-view p {
-    margin-bottom: 0.5rem;
+.item-panel-header h2 {
+    color: var(--primary-color);
+    margin: 0;
+    font-size: 2.2rem; /* Larger font for supply name */
 }
 
-.item-panel-view canvas {
-    max-width: 100%;
-    height: 300px;
+.item-category {
+    font-size: 1.1rem;
+    color: var(--text-muted);
     background-color: var(--background-dark);
+    padding: 0.4rem 0.8rem;
+    border-radius: var(--border-radius-lg);
+}
+
+.item-panel-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.detail-card {
+    background-color: var(--background-dark);
+    padding: 1.5rem;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--box-shadow-dark);
+    border: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.detail-card h3 {
+    color: var(--text-muted);
+    margin-top: 0;
+    margin-bottom: 0.8rem;
+    font-size: 1rem;
+    text-transform: uppercase;
+}
+
+.stock-value,
+.coverage-value {
+    font-size: 2.5rem; /* Very large for key numbers */
+    font-weight: bold;
+    color: var(--text-light);
+    margin: 0;
+}
+
+.status-badge {
+    font-size: 1.8rem; /* Large for status */
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius-lg);
+    display: inline-block;
+    margin-top: 0.5rem;
+}
+
+.status-ok {
+    color: var(--success-color);
+    background-color: rgba(92, 184, 92, 0.1);
+}
+
+.status-warning {
+    color: var(--warning-color);
+    background-color: rgba(240, 173, 78, 0.1);
+}
+
+.status-critical {
+    color: var(--danger-color);
+    background-color: rgba(217, 83, 79, 0.1);
+}
+
+.coverage-note {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+}
+
+.item-panel-chart,
+.item-panel-logs {
+    background-color: var(--background-dark);
+    padding: 1.5rem;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--box-shadow-dark);
+    border: 1px solid var(--border-color);
+    margin-bottom: 2rem;
+}
+
+.item-panel-chart h3,
+.item-panel-logs h3 {
+    color: var(--primary-color);
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.8rem;
+}
+
+.item-panel-chart canvas {
+    max-width: 100%;
+    height: 350px; /* Slightly taller chart */
+    background-color: var(--surface-dark); /* Chart background */
     border-radius: var(--border-radius-lg);
     padding: 1rem;
-    margin-top: 1.5rem;
-    margin-bottom: 1.5rem;
+    margin-top: 1rem;
 }
 
-.item-panel-view table {
-    margin-top: 1.5rem;
+.item-panel-logs table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 1rem;
 }
 
-.item-panel-view #back-to-dashboard {
+.item-panel-logs th,
+.item-panel-logs td {
+    padding: 0.8rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.item-panel-logs tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.log-type-usage {
+    color: var(--danger-color);
+    font-weight: bold;
+}
+
+.log-type-add {
+    color: var(--success-color);
+    font-weight: bold;
+}
+
+.btn-secondary {
     background-color: var(--secondary-color);
-    margin-top: 1.5rem;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: var(--border-radius-lg);
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 1rem;
+    transition: background-color var(--transition-speed) ease;
 }
 
-.item-panel-view #back-to-dashboard:hover {
+.btn-secondary:hover {
     background-color: #5a6268;
 }
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .item-panel-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .item-panel-header h2 {
+        font-size: 1.8rem;
+    }
+    .item-category {
+        margin-top: 0.5rem;
+    }
+    .item-panel-details {
+        grid-template-columns: 1fr;
+    }
+    .stock-value,
+    .coverage-value,
+    .status-badge {
+        font-size: 2rem;
+    }
+}
+
 
 .kpi-trend {
     font-size: 0.8em;
