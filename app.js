@@ -195,6 +195,28 @@ const services = {
             });
             return totalConsumption;
         },
+        getMostConsumedItemLast30d: () => {
+            const supplies = self.supplyRepository.list();
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+            let mostConsumed = { name: 'N/A', quantity: 0 };
+            if (supplies.length === 0) {
+                return mostConsumed;
+            }
+
+            supplies.forEach(supply => {
+                const logs = self.usageLogRepository.list(supply.id)
+                    .filter(log => new Date(log.date) > thirtyDaysAgo && log.type === 'usage');
+                const totalConsumed = logs.reduce((total, log) => total + log.quantity, 0);
+
+                if (totalConsumed > mostConsumed.quantity) {
+                    mostConsumed = { name: supply.name, quantity: totalConsumed };
+                }
+            });
+
+            return mostConsumed;
+        },
         projectDepletion: (supplyId) => {
             const supply = self.supplyRepository.get(supplyId);
             if (!supply) {
@@ -600,9 +622,18 @@ const ui = {
             // Update KPIs
             utils.qs('#total-supplies-kpi p', element).textContent = totalSuppliesCount;
             utils.qs('#at-risk-kpi p', element).textContent = `Critical: ${criticalCount}, Warning: ${warningCount}`;
-            const globalCoverageCard = utils.qs('#global-coverage-kpi', element);
-            globalCoverageCard.title = `Consumo 30d: ${consumptionLast30Days} units`;
-            utils.qs('p', globalCoverageCard).textContent = 'N/A';
+            
+            const mostConsumedItem = inventoryService.getMostConsumedItemLast30d();
+            const mostConsumedCard = utils.qs('#most-consumed-kpi', element);
+            if (mostConsumedCard) {
+                if (mostConsumedItem.quantity > 0) {
+                    utils.qs('p', mostConsumedCard).textContent = `${mostConsumedItem.name} (${mostConsumedItem.quantity} units)`;
+                    mostConsumedCard.title = `Most consumed item in the last 30 days.`;
+                } else {
+                    utils.qs('p', mostConsumedCard).textContent = 'N/A';
+                    mostConsumedCard.title = `No consumption recorded in the last 30 days.`;
+                }
+            }
 
 
             updateTable(supplies);
@@ -615,7 +646,7 @@ const ui = {
             <div class="kpi-panel">
                 <div class="kpi-card" id="total-supplies-kpi"><h3>Total Supplies</h3><p>0</p></div>
                 <div class="kpi-card" id="at-risk-kpi"><h3>En riesgo</h3><p>Critical: 0, Warning: 0</p></div>
-                <div class="kpi-card" id="global-coverage-kpi" title=""><h3>Global Coverage</h3><p>N/A</p></div>
+                <div class="kpi-card" id="most-consumed-kpi"><h3>Most Consumed (30d)</h3><p>N/A</p></div>
             </div>
             <div class="filters">
                 <input type="search" id="search" placeholder="Search by name...">
